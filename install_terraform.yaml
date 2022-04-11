@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Instalando pacotes de dependencias para o Terraform
+      when: ansible_facts['os_family'] == "Debian" 
+      tags:
+        - depende
+      apt:
+        name: ['gnupg', 'software-properties-common', 'curl']
+
+    - name: Add an Apt signing key for Terraform
+      when: ansible_facts['os_family'] == "Debian"
+      tags:
+        - repo 
+      apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        state: present
+      #become: yes
+      #become_method: "sudo"
+
+    - name:  Add repository Terraform
+      when: ansible_facts['os_family'] == "Debian" 
+      tags:
+        - repo
+      apt_repository:
+        filename: terraform
+        repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ansible_lsb['codename']}} main"
+        #state: present
+        update_cache: yes   
+
+    - name: Instalando o Docker
+      when: ansible_facts['os_family'] == "Debian" 
+      tags:
+        - install
+      apt:
+        name: ['terraform' ]    
+        
+
+      
