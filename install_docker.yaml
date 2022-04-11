@@ -1,0 +1,102 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+
+# REDHAT
+    - name: Instalando pacotes de dependencias para o Docker
+      when: ansible_facts['os_family'] == "RedHat" 
+      tags:
+        - dependencias
+      yum:
+        name: ['yum-utils ', 'device-mapper-persistent-data', 'lvm2',]
+       
+    - name: Add repository Docker-ce
+      when: ansible_facts['os_family'] == "RedHat" 
+      tags:
+        - repo
+      ansible.builtin.command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo   
+
+    - name: Instalando o Docker
+      when: ansible_facts['os_family'] == "RedHat" 
+      tags:
+        - docker
+      yum:
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io' ]     
+
+# DEBIAN
+    - name: Instalando pacotes de dependencias para o Docker
+      tags:
+        - dependencias
+      apt:
+        name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg-agent', 'software-properties-common']
+      when: ansible_facts['os_family'] == "Debian" 
+
+    - name: Add an Apt signing key for Docker
+      tags:
+        - repo 
+      when: ansible_facts['os_family'] == "Debian"
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      #become: yes
+      #become_method: "sudo" 
+
+    - name:  Add repository Docker-ce
+      when: ansible_facts['os_family'] == "Debian" 
+      tags:
+        - repo
+      apt_repository:
+        filename: docker
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ansible_lsb['codename']}} stable"
+        #state: present
+        update_cache: yes
+    
+    - name: Instalando o Docker
+      when: ansible_facts['os_family'] == "Debian" 
+      tags:
+        - docker
+      apt:
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io' ]
+
+# Geral
+    - name: Iniciando o serviço do Docker
+      tags:
+        - docker_start
+      ansible.builtin.systemd:
+        state: started
+        name: docker 
+        enabled: yes
+            
+    - name: Criando json-file Docker
+      tags:
+        - docker_file
+      copy:
+        dest: "/etc/docker/daemon.json"
+        content: |
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2",
+            "storage-opts": [
+              "overlay2.override_kernel_check=true"
+              ]
+          }
+  
+    - name: Reiniciando Serviço Docker
+      tags:
+        - docker_restart
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: yes
+        name: docker      
+
+#teste do Docker
+#systemctl status docker
+#docker info
+#docker run hello-world
