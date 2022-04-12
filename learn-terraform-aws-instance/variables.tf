@@ -3,3 +3,14 @@ variable "instance_name" {
   type        = string
   default     = "ExampleAppServerInstance"
 }
+
+variable "resource_group_name" {
+  description = "Default resource group name that the network will be created in."
+  type        = list(string)
+  default     = ["srv1","srv2"]
+}
+
+variable "location" {
+  description = "The location/region where the core network will be created."
+  default     = "sa-east-1"
+}
