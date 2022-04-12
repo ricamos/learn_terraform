@@ -1,0 +1,5 @@
+learn-terraform-aws-instance/.terraform.lock.hcl
+learn-terraform-aws-instance/.terraform/
+learn-terraform-aws-instance/terraform.tfstate
+learn-terraform-aws-instance/terraform.tfstate.backup
+learn-terraform-docker-container/terraform.tfstate.backup
