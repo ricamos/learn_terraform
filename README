@@ -1,1 +1,9 @@
+terraform init
+terraform fmt
+terraform validate
+terraform apply
+
+Refs:
 https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code
+https://github.com/Einsteinish/Using-Ansible-with-Terraform
+https://www.cprime.com/resources/blog/terraform-and-ansible-tutorial-integrating-terraform-managed-instances-with-ansible-control-nodes/
