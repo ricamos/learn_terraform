@@ -17,7 +17,7 @@ variable "location" {
 
 variable "instance_count" {
   description = "number of instances"
-  default     = 1
+  default     = 2
 }
 
 variable "ami_id" {

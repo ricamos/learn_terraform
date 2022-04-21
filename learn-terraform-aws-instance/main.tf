@@ -25,12 +25,15 @@ resource "aws_instance" "app_server" {
     # starting with the distinct index number 0 and corresponding to this instance.
     Name = "srv${count.index}"
   }
+}
 
+resource "null_resource" "ProvisionRemoteHostsIpToAnsibleHosts" {
+  count = "${var.instance_count}"
   connection {
     type        = "ssh"
     user        = var.ssh_user_name
     private_key = file(pathexpand(var.ssh_key_path))
-    host        = self.public_ip
+    host        = "${element(aws_instance.app_server.*.public_ip, count.index)}"
   }
 
   provisioner "local-exec" { 
