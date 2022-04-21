@@ -1,3 +1,7 @@
+export AWS_ACCESS_KEY_ID="<YOUR_AWS_ACCESS_KEY_ID>"
+export AWS_SECRET_ACCESS_KEY="<YOUR_AWS_SECRET_ACCESS_KEY>"
+export AWS_DEFAULT_REGION="<YOUR_AWS_DEFAULT_REGION>"
+
 terraform init
 terraform fmt
 terraform validate
@@ -7,3 +11,4 @@ Refs:
 https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code
 https://github.com/Einsteinish/Using-Ansible-with-Terraform
 https://www.cprime.com/resources/blog/terraform-and-ansible-tutorial-integrating-terraform-managed-instances-with-ansible-control-nodes/
+https://discuss.hashicorp.com/t/create-resources-iterating-through-the-values-of-a-map-rather-key/6003
