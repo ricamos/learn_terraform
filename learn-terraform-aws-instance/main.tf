@@ -11,20 +11,20 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "sa-east-1"
+  region  = "${var.location}"
 }
-  
-resource "aws_instance" "app_server" {
-  count = 4 
-  ami           = "ami-0c2485d67d416fc4f"
-  instance_type = "t2.micro"
-  key_name   = "ricardo"
 
-  tags = {
+resource "aws_instance" "app_server" {
+  count         = "${var.instance_count}"
+  ami           = "${var.ami_id}"
+  instance_type = "${var.instance_type}"
+  key_name      = "${var.ssh_key_name}"
+
+  tags = {  
     # The count.index allows you to launch a resource 
     # starting with the distinct index number 0 and corresponding to this instance.
-    Name = "srv${count.index}"  
+    Name = "srv${count.index}"
   }
 }
 
-		
+  
