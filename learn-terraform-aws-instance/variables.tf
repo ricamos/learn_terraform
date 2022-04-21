@@ -17,7 +17,7 @@ variable "location" {
 
 variable "instance_count" {
   description = "number of instances"
-  default     = 1
+  default     = 2
 }
 
 variable "ami_id" {
@@ -33,4 +33,14 @@ variable "instance_type" {
 variable "ssh_key_name" {
   description = "AWS EC2 ssh key name"
   default     = "acesso"
+}
+
+variable "ssh_user_name" {
+  description = "SSH user"
+  default     = "ec2-user"
+}
+
+variable "ssh_key_path" {
+  description = "Local ssh key"
+  default     = "~/Downloads/acesso.pem"
 }

@@ -1,0 +1,22 @@
+---
+- name: install app
+  hosts: all
+  gather_facts: no
+  become: true
+
+  tasks:
+    - name: Install git.
+      package: name={{item}} state=present update_cache=true
+      with_items:
+        - git 
+
+    - name: Install a list of packages
+      yum:
+        name:
+          - httpd
+        state: present
+
+    - name: start httpd
+      service:
+          name: httpd
+          state: started
